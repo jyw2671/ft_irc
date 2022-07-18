@@ -17,7 +17,7 @@
 #define CHANNEL_USER_MAX	42
 #define CHANNEL_LENGTH_MAX	50
 #define CLIENT_CHANNEL_MAX	10
-#define NICK_LENGTN_MAX	9
+#define NICK_LENGTH_MAX	9
 #define EVENTS_MAX	1024
 #define SPECIALCHAR	"[]\\`-^{|}"
 #define CHSTRING	" ,\r\n\7"
@@ -58,8 +58,8 @@ enum e_type
 	NOTICE,
 	PING,
 	PONG,
-	UNKNWON,
-	UNREGISTER,
+	UNKNOWN,
+	UNREGISTERED,
 	CHANNEL_NAME,
 	NOMSG,
 	CHANNEL_PREFIX = '#',

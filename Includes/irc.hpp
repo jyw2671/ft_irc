@@ -32,8 +32,8 @@ class IRC
 
 		std::string err_no_such_nick(const std::string&);
 		std::string err_no_such_channel(const std::string&);
-		std::string err_too_many_channels(const std::string&);
 		std::string err_cannot_send_to_channel(const std::string&, char);
+		std::string err_too_many_channels(const std::string&);
 		std::string err_too_many_targets(const std::string&);
 		std::string err_no_recipient();
 		std::string err_no_text_to_send();
