@@ -2,6 +2,7 @@
 
 int main(int argc, char *argv[])
 {
+
     if (argc < 3)
     {
         std::cerr << "usage: " << argv[0] << "<port> <password>" << std::endl;
@@ -10,10 +11,7 @@ int main(int argc, char *argv[])
     try
     {
         int port;
-        
-        IRCServer  server(argv[2]);
-        
-        IRCSessionFactory   sessionFactory(&server);
+
         try
         {
             port = (unsigned int)atoi(argv[1]);
@@ -24,7 +22,8 @@ int main(int argc, char *argv[])
         }
         if (port < 1 || port > 65535)
             throw std::runtime_error("Not valid port range");
-        server.start();
+        FT_IRC ft_irc(port, argv[2]);
+        ft_irc.start();
     }
     catch(const std::exception& ex)
     {
