@@ -1,6 +1,4 @@
-#include "../includes/ircclient.hpp"
-#include "../includes/ircchannel.hpp"
-#include "../includes/ircserver.hpp"
+#include "ircclient.hpp"
 
 IRCClient::IRCClient(sockaddr_in addr, int fd) : _addr(addr), _fd(fd)
 {

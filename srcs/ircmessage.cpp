@@ -1,5 +1,4 @@
-#include "../includes/ircclient.hpp"
-#include "../includes/irccommand.hpp"
+#include "ircmessage.hpp"
 
 IRCMessage::IRCMessage() : endl("\r\n")
 {

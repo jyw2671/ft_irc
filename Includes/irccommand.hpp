@@ -1,8 +1,9 @@
 #ifndef IRCCOMMAND_HPP
 #define IRCCOMMAND_HPP
 
+#include "ircserver.hpp"
 #include "ircmessage.hpp"
-#include "ircutils.hpp"
+#include <sstream>
 
 class IRCCommand : public IRCMessage
 {

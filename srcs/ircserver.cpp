@@ -1,4 +1,4 @@
-#include "../includes/ircserver.hpp"
+#include "ircserver.hpp"
 
 //http://forum.falinux.com/zbxe/index.php?document_srl=406054&mid=network_programming
 

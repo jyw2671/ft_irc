@@ -2,6 +2,11 @@
 #define IRCSOCKET_HPP
 
 #include "irclog.hpp"
+#include "ircclient.hpp"
+#include <fcntl.h>
+#include <netdb.h>
+#include <sys/event.h>
+#include <unistd.h>
 #include <arpa/inet.h>
 
 #define IPV4_MAX 65535
