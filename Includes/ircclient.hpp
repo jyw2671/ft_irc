@@ -1,15 +1,15 @@
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
+#ifndef IRCCLIENT_HPP
+#define IRCCLIENT_HPP
 
-#include "utils.hpp"
-#include "channel.hpp"
-#include "ft_irc.hpp"
+#include "ircutils.hpp"
+#include "ircchannel.hpp"
+#include "ircserver.hpp"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-class Channel;
+class IRCChannel;
 
-class Client
+class IRCClient
 {
 	public:
 		typedef struct s_names
@@ -31,8 +31,8 @@ class Client
 
 		typedef struct s_requests
 		{
-			Client*	from;
-			std::queue<Client::t_request> queue;
+			IRCClient*	from;
+			std::queue<IRCClient::t_request> queue;
 		} t_requests;
 
 		typedef struct s_to_client
@@ -60,12 +60,12 @@ class Client
 			unsigned char regsistered;
 		} t_status;
 
-		typedef std::set<Channel*>::const_iterator t_citer;
+		typedef std::set<IRCChannel*>::const_iterator t_citer;
 
 	private:
 		sockaddr_in	_addr;
 		int	_fd;
-		std::set<Channel*> _channels;
+		std::set<IRCChannel*> _channels;
 
 	protected:
 		t_status _status;
@@ -73,9 +73,9 @@ class Client
 		t_buffers _buffers;
 
 	public:
-		Client(sockaddr_in client_addr, int client_fd);
-		Client();
-		~Client();
+		IRCClient(sockaddr_in client_addr, int client_fd);
+		IRCClient();
+		~IRCClient();
 
 		//getter
 		sockaddr_in	get_addr();
@@ -83,7 +83,7 @@ class Client
 		char*		get_IP();
 		const t_names&	get_names() const;
 		t_buffers&		get_buffers();
-		const std::set<Channel*>&	get_channels() const;
+		const std::set<IRCChannel*>&	get_channels() const;
 		bool		get_status(e_type);
 		std::string	get_nickmask();
 
@@ -94,10 +94,10 @@ class Client
 		void set_status(e_type);
 
 		bool is_registered() const;
-		bool is_joined(Channel* channel);
+		bool is_joined(IRCChannel* channel);
 
-		void joined(Channel* channel);
-		void parted(Channel* channel);
+		void joined(IRCChannel* channel);
+		void parted(IRCChannel* channel);
 };
 
 #endif

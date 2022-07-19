@@ -1,5 +1,5 @@
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#ifndef IRCUTILS_HPP
+#define IRCUTILS_HPP
 
 #include <map>
 #include <queue>
@@ -8,7 +8,7 @@
 #include <vector>
 
 #define NAME_HOST	"localhost"
-#define NAME_SERVER	"ft_irc"
+#define NAME_SERVER	"ircserver"
 
 #define POST_MAX	65535
 #define IPV4_MAX	65535

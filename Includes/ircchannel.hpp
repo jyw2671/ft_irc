@@ -1,18 +1,18 @@
-#ifndef CHANNEL_HPP
-#define CHANNEL_HPP
+#ifndef IRCCHANNEL_HPP
+#define IRCCHANNEL_HPP
 
-#include "client.hpp"
-#include "log.hpp"
-#include "utils.hpp"
+#include "ircclient.hpp"
+#include "irclog.hpp"
+#include "ircutils.hpp"
 
-class Client;
+class IRCClient;
 
-class Channel
+class IRCChannel
 {
 	public:
 		typedef std::string		t_str_info;
-		typedef std::vector<Client*>	t_vector_memver;
-		typedef std::set<Client*>		t_set_invitee;
+		typedef std::vector<IRCClient*>	t_vector_memver;
+		typedef std::set<IRCClient*>		t_set_invitee;
 		typedef t_vector_memver::const_iterator t_citer_member;
 
 		typedef union
@@ -43,22 +43,22 @@ class Channel
 		} t_reserved;
 
 	private:
-		Channel();
-		Channel(const Channel&);
-		Channel& operator=(const Channel&);
+		IRCChannel();
+		IRCChannel(const IRCChannel&);
+		IRCChannel& operator=(const IRCChannel&);
 		bool	m_set_status(const bool&, unsigned char&);
-		const Channel::t_citer_member	find(Client* client);
+		const IRCChannel::t_citer_member	find(IRCClient* client);
 
 		std::string	_name;
 		std::string	_topic;
-		Client*		_operator;
+		IRCClient*		_operator;
 		t_vector_memver	_members;
 		t_status	_status;
 		t_reserved	_reserved;
 		t_set_invitee	_invitees;
 	public:
-		Channel(const std::string& name, Client* client);
-		~Channel();
+		IRCChannel(const std::string& name, IRCClient* client);
+		~IRCChannel();
 
 		//getter
 		const std::string&	get_name() const;
@@ -66,7 +66,7 @@ class Channel
 		const t_vector_memver&	get_members();
 		bool	get_status(e_type type);
 		std::string	get_status();
-		Client*	get_operator();
+		IRCClient*	get_operator();
 
 		//setter
 		void	set_name(const std::string& name);
@@ -80,15 +80,15 @@ class Channel
 
 		bool	is_empty();
 		bool	is_full();
-		bool	is_operator(Client* client);
-		bool	is_joined(Client* client);
-		bool	is_invited(Client* client);
+		bool	is_operator(IRCClient* client);
+		bool	is_joined(IRCClient* client);
+		bool	is_invited(IRCClient* client);
 		bool	is_signed();
 		bool	is_reserve();
 
-		void	join(Client* client);
-		void	part(Client* client);
-		void	invitation(Client* client);
+		void	join(IRCClient* client);
+		void	part(IRCClient* client);
+		void	invitation(IRCClient* client);
 };
 
 

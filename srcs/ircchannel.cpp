@@ -1,6 +1,6 @@
-#include "channel.hpp"
+#include "ircchannel.hpp"
 
-Channel::Channel(const std::string& name, Client* client) : _name(name), _operator(client)
+IRCChannel::IRCChannel(const std::string& name, IRCClient* client) : _name(name), _operator(client)
 {
 	_status.state = 0;
 	_reserved.sign.state = 0;
@@ -9,11 +9,11 @@ Channel::Channel(const std::string& name, Client* client) : _name(name), _operat
 	log::print() << "new channel: " << name << log::endl;
 }
 
-Channel::~Channel()
+IRCChannel::~IRCChannel()
 {
 }
 
-const Channel::t_citer_member	Channel::find(Client* client)
+const IRCChannel::t_citer_member	IRCChannel::find(IRCClient* client)
 {
 	t_citer_member iter = _members.begin();
 	t_citer_member end = _members.end();
@@ -24,22 +24,22 @@ const Channel::t_citer_member	Channel::find(Client* client)
 }
 
 //getter
-const std::string&	Channel::get_name() const
+const std::string&	IRCChannel::get_name() const
 {
 	return (_name);
 }
 
-const std::string&	Channel::get_topic() const
+const std::string&	IRCChannel::get_topic() const
 {
 	return (_topic);
 }
 
-const Channel::t_vector_memver&	Channel::get_members()
+const IRCChannel::t_vector_memver&	IRCChannel::get_members()
 {
 	return (_members);
 }
 
-bool	Channel::get_status(e_type type)
+bool	IRCChannel::get_status(e_type type)
 {
 	if (type == INVITE)
 		return (_status.invite);
@@ -50,7 +50,7 @@ bool	Channel::get_status(e_type type)
 	return (false);
 }
 
-std::string	Channel::get_status()
+std::string	IRCChannel::get_status()
 {
 	std::string str;
 	if (_status.invite)
@@ -62,23 +62,23 @@ std::string	Channel::get_status()
 	return (str);
 }
 
-Client*	Channel::get_operator()
+IRCClient*	IRCChannel::get_operator()
 {
 	return (_operator);
 }
 
 //setter
-void	Channel::set_name(const std::string& name)
+void	IRCChannel::set_name(const std::string& name)
 {
 	this->_name = name;
 }
 
-void	Channel::set_topic(const std::string& topic)
+void	IRCChannel::set_topic(const std::string& topic)
 {
 	this->_topic = topic;
 }
 
-void	Channel::set_status(e_type type, bool state)
+void	IRCChannel::set_status(e_type type, bool state)
 {
 	switch (type)
 	{
@@ -96,7 +96,7 @@ void	Channel::set_status(e_type type, bool state)
 	}
 }
 
-void	Channel::set_status(std::string& status)
+void	IRCChannel::set_status(std::string& status)
 {
 	std::string changed;
 	bool sign = _reserved.sign.positive ? true : false;
@@ -122,7 +122,7 @@ void	Channel::set_status(std::string& status)
 	status.append(changed);
 }
 
-void	Channel::reserve_flags(const char c)
+void	IRCChannel::reserve_flags(const char c)
 {
 	switch (c)
 	{
@@ -139,7 +139,7 @@ void	Channel::reserve_flags(const char c)
 	}
 }
 
-void	Channel::reserve_sign(const char c)
+void	IRCChannel::reserve_sign(const char c)
 {
 	if (c == '+')
 		_reserved.sign.positive = true;
@@ -147,54 +147,54 @@ void	Channel::reserve_sign(const char c)
 		_reserved.sign.negative = true;
 }
 
-void	Channel::reserve_clear()
+void	IRCChannel::reserve_clear()
 {
 	_reserved.flag.state = 0;
 	_reserved.sign.state = 0;
 }
 
-bool	Channel::is_empty()
+bool	IRCChannel::is_empty()
 {
 	return ((_members.empty()) && (_operator = nullptr));
 }
 
-bool	Channel::is_full()
+bool	IRCChannel::is_full()
 {
 	return ((_members.size() + (_operator == nullptr ? 0 : 1)) >= CHANNEL_USER_MAX);
 }
 
-bool	Channel::is_operator(Client* client)
+bool	IRCChannel::is_operator(IRCClient* client)
 {
 	return (_operator == client);
 }
 
-bool	Channel::is_joined(Client* client)
+bool	IRCChannel::is_joined(IRCClient* client)
 {
 	return (is_operator(client) || (find(client) != _members.end()));
 }
 
-bool	Channel::is_invited(Client* client)
+bool	IRCChannel::is_invited(IRCClient* client)
 {
 	return (_invitees.count(client));
 }
 
-bool	Channel::is_signed()
+bool	IRCChannel::is_signed()
 {
 		return (_reserved.sign.state);
 }
-bool	Channel::is_reserve()
+bool	IRCChannel::is_reserve()
 {
 		return (_reserved.flag.state);
 }
 
-void	Channel::join(Client* client)
+void	IRCChannel::join(IRCClient* client)
 {
 	_members.push_back(client);
 	client->joined(this);
 	_invitees.erase(client);
 }
 
-void	Channel::part(Client* client)
+void	IRCChannel::part(IRCClient* client)
 {
 	if (is_operator(client))
 		_operator = nullptr;
@@ -203,7 +203,7 @@ void	Channel::part(Client* client)
 	client->parted(this);
 }
 
-void	Channel::invitation(Client* client)
+void	IRCChannel::invitation(IRCClient* client)
 {
 	_invitees.insert(client);
 }

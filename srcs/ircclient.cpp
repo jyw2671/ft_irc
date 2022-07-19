@@ -1,6 +1,6 @@
-#include "../includes/client.hpp"
+#include "ircclient.hpp"
 
-Client::Client(sockaddr_in addr, int fd) : _addr(addr), _fd(fd)
+IRCClient::IRCClient(sockaddr_in addr, int fd) : _addr(addr), _fd(fd)
 {
 	_buffers.requests.from = this;
 	_names.host = inet_ntoa(_addr.sin_addr);
@@ -10,71 +10,71 @@ Client::Client(sockaddr_in addr, int fd) : _addr(addr), _fd(fd)
 	_buffers.to_client.offset = 0;
 }
 
-Client::Client()
+IRCClient::IRCClient()
 {
 }
 
-Client::~Client()
+IRCClient::~IRCClient()
 {
 }
 
 //getter
 
-sockaddr_in	Client::get_addr()
+sockaddr_in	IRCClient::get_addr()
 {
 	return (_addr);
 }
 
-int	Client::get_fd()
+int	IRCClient::get_fd()
 {
 	return (_fd);
 }
 
-char*	Client::get_IP()
+char*	IRCClient::get_IP()
 {
 	return (inet_ntoa(_addr.sin_addr));
 }
 
-const Client::t_names&	Client::get_names() const
+const IRCClient::t_names&	IRCClient::get_names() const
 {
 	return (_names);
 }
 
-Client::t_buffers&	Client::get_buffers()
+IRCClient::t_buffers&	IRCClient::get_buffers()
 {
 	return (_buffers);
 }
 
-const std::set<Channel*>&	Client::get_channels() const
+const std::set<IRCChannel*>&	IRCClient::get_channels() const
 {
 	return (_channels);
 }
 
-std::string	Client::get_nickmask()
+std::string	IRCClient::get_nickmask()
 {
 	return ((_names.nick.empty() ? "*" : _names.nick) + "!"
 			+ (_names.user.empty() ? "*" : _names.user) + "@"
 			+ (_names.host.empty() ? "*" : _names.host));
 }
 
-void Client::set_nickname(const std::string& nickname)
+void IRCClient::set_nickname(const std::string& nickname)
 {
 	_names.nick = nickname;
 	_status.nick = 1;
 }
 
-void Client::set_username(const std::string& username)
+void IRCClient::set_username(const std::string& username)
 {
 	_names.user = username;
 	_status.user = 1;
 }
 
-void Client::set_realname(const std::string& realname)
+void IRCClient::set_realname(const std::string& realname)
 {
 	_names.real = realname;
 }
 
-void Client::set_status(e_type type)
+void IRCClient::set_status(e_type type)
 {
 	switch (type)
 	{
@@ -92,22 +92,22 @@ void Client::set_status(e_type type)
 	}
 }
 
-bool Client::is_registered() const
+bool IRCClient::is_registered() const
 {
 	return (_status.regsistered == REGISTERED);
 }
 
-bool Client::is_joined(Channel* channel)
+bool IRCClient::is_joined(IRCChannel* channel)
 {
 	return (_channels.count(channel));
 }
 
-void Client::joined(Channel *channel)
+void IRCClient::joined(IRCChannel *channel)
 {
 	_channels.insert(channel);
 }
 
-void Client::parted(Channel* channel)
+void IRCClient::parted(IRCChannel* channel)
 {
 	_channels.erase(channel);
 }

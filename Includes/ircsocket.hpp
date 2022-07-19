@@ -1,8 +1,8 @@
-#ifndef SOCKET_HPP
-#define SOCKET_HPP
+#ifndef IRCSOCKET_HPP
+#define IRCSOCKET_HPP
 
-#include "log.hpp"
-#include "client.hpp"
+#include "irclog.hpp"
+#include "ircclient.hpp"
 #include <fcntl.h>
 #include <netdb.h>
 #include <sys/event.h>
@@ -11,9 +11,16 @@
 
 #define IPV4_MAX 65535
 
-class Socket
+class IRCSocket
 {
 	public:
+		/**
+		 * @brief s_socket struct
+		 *
+		 * socket fd
+		 * sockaddr_in struct
+		 * socklen_t
+		 */
 		typedef struct s_socket
 		{
 			int			fd;
@@ -27,19 +34,20 @@ class Socket
 		void socket_listen();
 		void socket_accept();
 		void socket_close();
-		Socket(const Socket&);
-		Socket& operator=(const Socket&);
+		IRCSocket(const IRCSocket&);
+		IRCSocket& operator=(const IRCSocket&);
 
 	protected:
 		t_socket	_socket;
 		ssize_t		_result;
 		ssize_t		_remain;
+		//client 주소를 저장하기 위한 변수
 		sockaddr_in	_addr;
 		int			_fd;
 		char		_buffer[IPV4_MAX];
 
-		Socket();
-		~Socket();
+		IRCSocket();
+		~IRCSocket();
 		void	init(int port);
 		int		accept();
 		ssize_t	receive(const struct kevent& evnet);

@@ -1,34 +1,34 @@
-#ifndef IRC_HPP
-#define IRC_HPP
+#ifndef IRCMESSAGE_HPP
+#define IRCMESSAGE_HPP
 
-#include "channel.hpp"
-#include "client.hpp"
-#include "log.hpp"
-#include "utils.hpp"
+#include "ircchannel.hpp"
+#include "ircclient.hpp"
+#include "irclog.hpp"
+#include "ircutils.hpp"
 
-class FC_IRC;
+class IRCServer;
 
-class IRC
+class IRCMessage
 {
 	public:
 		typedef std::map<e_type, std::string>	t_map_irc;
 		typedef std::map<std::string, e_type>	t_map_type;
-		typedef std::map<std::string, Client*>	t_map_client;
-		typedef std::map<std::string, Channel*>	t_map_channel;
+		typedef std::map<std::string, IRCClient*>	t_map_client;
+		typedef std::map<std::string, IRCChannel*>	t_map_channel;
 		typedef t_map_client::const_iterator	t_iter_cl;
 		typedef t_map_channel::const_iterator	t_iter_ch;
 
 	private:
-		IRC(const IRC&);
-		IRC& operator=(const IRC&);
+		IRCMessage(const IRCMessage&);
+		IRCMessage& operator=(const IRCMessage&);
 
 		std::string	reply_servername_prefix(const std::string&);
 		std::string	reply_nickmask_prefix(const std::string&);
 		const std::string endl;
 
 	public:
-		IRC();
-		~IRC();
+		IRCMessage();
+		~IRCMessage();
 
 		std::string err_no_such_nick(const std::string&);
 		std::string err_no_such_channel(const std::string&);
@@ -79,14 +79,14 @@ class IRC
 		std::string cmd_pong_reply();
 
 		protected:
-			FT_IRC*					_ft_irc;
+			IRCServer*				_ircserver;
 			t_map_irc				_type_to_command;
 			t_map_type				_command_to_type;
-			Client*					_client;
-			Channel*				_channel;
-			Client::t_requests*		_requests;
-			Client::t_request*		_request;
-			Client::t_to_client*	_to_client;
+			IRCClient*				_client;
+			IRCChannel*				_channel;
+			IRCClient::t_requests*	_requests;
+			IRCClient::t_request*	_request;
+			IRCClient::t_to_client*	_to_client;
 			std::string				_password;
 			bool					_ascii[127];
 };

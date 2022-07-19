@@ -1,18 +1,18 @@
-#ifndef EVENT_HPP
-#define EVENT_HPP
+#ifndef IRCEVENT_HPP
+#define IRCEVENT_HPP
 
-#include "client.hpp"
-#include "log.hpp"
+#include "ircclient.hpp"
+#include "irclog.hpp"
 #include <sys/event.h>
 #include <sys/types.h>
 
-class Client;
+class IRCClient;
 
-class Event
+class IRCEvent
 {
 	private:
-		Event(const Event&);
-		Event& operator=(const Event&);
+		IRCEvent(const IRCEvent&);
+		IRCEvent& operator=(const IRCEvent&);
 
 		//EV_SET(&kev, ident, filter, flags, fflags, data, udata);
 		void event_set(uintptr_t ident, int16_t filter,
@@ -24,15 +24,15 @@ class Event
 		struct kevent _events[EVENTS_MAX];
 		int		_index;
 
-		Event();
-		~Event();
+		IRCEvent();
+		~IRCEvent();
 
-		void	toggle(int EVFILT_TYPE);
-		void	toggle(Client& client, int EVFILT_TYPE);
-		void	init(int socket_fd);
-		void	add(Client* client);
-		void	remove(int fd);
 		int		kevent();
+		void	init(int socket_fd);
+		void	add(IRCClient* client);
+		void	remove(int fd);
+		void	toggle(int EVFILT_TYPE);
+		void	toggle(IRCClient& client, int EVFILT_TYPE);
 };
 
 #endif

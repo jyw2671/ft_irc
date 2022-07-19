@@ -1,6 +1,6 @@
 #pragma once
-#ifndef LOG_HPP
-#define LOG_HPP
+#ifndef IRCLOG_HPP
+#define IRCLOG_HPP
 
 #include <ctime>
 #include <iostream>

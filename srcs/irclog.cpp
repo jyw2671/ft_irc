@@ -1,4 +1,4 @@
-#include "../includes/log.hpp"
+#include "irclog.hpp"
 
 void log::timestamp()
 {
