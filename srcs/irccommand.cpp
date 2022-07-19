@@ -1,4 +1,7 @@
-#include "irccommand.hpp"
+#include "../includes/ircserver.hpp"
+#include "../includes/ircmessage.hpp"
+#include <sstream>
+
 
 IRCCommand::t_cstr_vector
     IRCCommand::split(const std::string& params, char delimiter)

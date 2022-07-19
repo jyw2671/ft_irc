@@ -1,4 +1,9 @@
-#include "ircsocket.hpp"
+#include "../includes/ircsocket.hpp"
+#include "../includes/ircclient.hpp"
+#include <fcntl.h>
+#include <netdb.h>
+#include <sys/event.h>
+#include <unistd.h>
 
 /**
  * @brief Construct a new IRCSocket::IRCSocket object

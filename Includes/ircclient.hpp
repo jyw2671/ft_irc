@@ -2,8 +2,6 @@
 #define IRCCLIENT_HPP
 
 #include "ircutils.hpp"
-#include "ircchannel.hpp"
-#include "ircserver.hpp"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
