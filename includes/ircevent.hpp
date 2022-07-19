@@ -33,7 +33,6 @@ select와 거의 동일하지만 관리할 수 있는 파일 디스크립터가 
 low level의 처리로 system call의 호출이 select보다 적고 이식성이 좋지 않다.
 접속 수가 늘어나면 오히려 fd당 체크 마스크의 크기가 select는 3bit이지만, poll은 64bit정도로 양이 많이지면 성능이 select보다 떨어진다.
 */
-
 class IRCClient;
 
 class IRCEvent
