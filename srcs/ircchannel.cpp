@@ -1,4 +1,4 @@
-#include "ircchannel.hpp"
+#include "irclog.hpp"
 
 IRCChannel::IRCChannel(const std::string& name, IRCClient* client) : _name(name), _operator(client)
 {
