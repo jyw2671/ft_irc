@@ -140,12 +140,12 @@ void IRCServer::irc_command_handler()
 	IRCMessage::_to_client = nullptr;
 }
 
-void IRCServer::irc_disconnected(std::string reason = "")
+void IRCServer::irc_disconnected(std::string reason)
 {
 	//disconnected
 	log::print() << "fd " << _fd << "disconnected" << log::endl;
 	IRCEvent::remove(_fd);
-	IRCCommand::m_to_channels(cmd_quit_reply("connection closed"));
+	IRCCommand::m_to_channels(cmd_quit_reply(reason));
 
 	std::set<IRCChannel*> copy = _client->get_channels();
 
@@ -167,7 +167,7 @@ void IRCServer::irc_disconnected(std::string reason = "")
 	_client = nullptr;
 }
 
-void IRCServer::irc_disconnect(std::string reason = "")
+void IRCServer::irc_disconnect(std::string reason)
 {
 	IRCSocket::close(_client->get_fd());
 	irc_disconnected(reason);
