@@ -1,4 +1,4 @@
-#include "ircserver.hpp"
+#include "ft_irc.hpp"
 
 int main(int argc, char *argv[])
 {

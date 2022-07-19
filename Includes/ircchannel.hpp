@@ -1,8 +1,6 @@
 #ifndef IRCCHANNEL_HPP
 #define IRCCHANNEL_HPP
 
-#include "ircclient.hpp"
-#include "irclog.hpp"
 #include "ircutils.hpp"
 
 class IRCClient;
