@@ -24,6 +24,10 @@
 #define CONNECTION	4
 #define DELIMITER	','
 
+/**
+ * @brief exit type
+ *
+ */
 enum e_exit
 {
 	SUCCESS,
@@ -39,6 +43,10 @@ enum e_result
 	OK = 1,
 };
 
+/**
+ * @brief command type
+ *
+ */
 enum e_type
 {
 	EMPTY,

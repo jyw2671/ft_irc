@@ -44,7 +44,7 @@ class IRCSocket
 		IRCSocket();
 		~IRCSocket();
 		void	init(int port);
-		
+
 		/**
 	     * @brief 연결을 수락할 때 사용하는 함수입니다.
 	     * @details 이 함수를 실행하여서 backlog에 있는 socket을 accept를 사용해 꺼내오고,
@@ -54,7 +54,7 @@ class IRCSocket
 	     * 따라서 오류가 발생한 세션을 간단히 종료시키고, 계속해서 다른 연결을 받을 수 있습니다.
 	     */
 		int		accept();
-		
+
 		/**
 	     * @brief 세션에서 데이터를 읽어올 때 사용하는 함수입니다.
 	     * @details kevent 함수에서 데이터를 읽을 수 있음이 확인되면,
@@ -69,6 +69,7 @@ class IRCSocket
 	     * @exception session이 NULL이라면 std::runtime_error 예외가 발생합니다.
 	     */
 		ssize_t	receive(const struct kevent& evnet);
+
 		/**
 	     * @brief 세션에서 원격으로 데이터를 보낼 때 사용하는 함수입니다.
 	     * @details kevent 함수에서 데이터를 1 바이트라도 보낼 수 있음이 확인되면, 이 함수를 호출해서

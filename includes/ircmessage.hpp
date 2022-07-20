@@ -11,12 +11,12 @@ class IRCServer;
 class IRCMessage
 {
 	public:
-		typedef std::map<e_type, std::string>	t_map_irc;
-		typedef std::map<std::string, e_type>	t_map_type;
+		typedef std::map<e_type, std::string>		t_map_irc;
+		typedef std::map<std::string, e_type>		t_map_type;
 		typedef std::map<std::string, IRCClient*>	t_map_client;
 		typedef std::map<std::string, IRCChannel*>	t_map_channel;
-		typedef t_map_client::const_iterator	t_iter_cl;
-		typedef t_map_channel::const_iterator	t_iter_ch;
+		typedef t_map_client::const_iterator		t_iter_cl;
+		typedef t_map_channel::const_iterator		t_iter_ch;
 
 	private:
 		IRCMessage(const IRCMessage&);

@@ -20,12 +20,9 @@ e_result
 void
     IRCCommand::nick()
 {
-    log::print() << "nick func check" << log::endl;
     if (m_nick() == ERROR)
-    {
-        log::print() << "nick error" << log::endl;
         return;
-    }
+
     if (_client->is_registered())
     {
         if (_client->get_channels().size())

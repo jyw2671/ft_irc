@@ -66,9 +66,9 @@ class IRCClient
 		std::set<IRCChannel*> _channels;
 
 	protected:
-		t_status _status;
-		t_names	_names;
-		t_buffers _buffers;
+		t_status	_status;
+		t_names		_names;
+		t_buffers	_buffers;
 
 	public:
 		IRCClient(sockaddr_in client_addr, int client_fd);
@@ -76,14 +76,14 @@ class IRCClient
 		~IRCClient();
 
 		//getter
-		sockaddr_in	get_addr();
-		int			get_fd();
-		char*		get_IP();
+		sockaddr_in		get_addr();
+		int				get_fd();
+		char*			get_IP();
 		const t_names&	get_names() const;
 		t_buffers&		get_buffers();
+		bool			get_status(e_type);
+		std::string		get_nickmask();
 		const std::set<IRCChannel*>&	get_channels() const;
-		bool		get_status(e_type);
-		std::string	get_nickmask();
 
 		//setter
 		void set_nickname(const std::string& nickname);

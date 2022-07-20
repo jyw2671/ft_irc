@@ -9,32 +9,32 @@ class IRCCommand : public IRCMessage
 	public:
 		typedef struct s_map
 		{
-				t_map_client  client;
-				t_map_channel channel;
+			t_map_client  client;
+			t_map_channel channel;
 		} t_map;
 
-		typedef std::vector<void (IRCCommand::*)()>  t_commands_irc;
-		typedef std::vector<const std::string> t_cstr_vector;
-		typedef t_cstr_vector::iterator        t_iter;
+		typedef std::vector<void (IRCCommand::*)()>	t_commands_irc;
+		typedef std::vector<const std::string>		t_cstr_vector;
+		typedef t_cstr_vector::iterator				t_iter;
 
 	private:
-		const std::string*   _target;
-		const std::string*   _target_sub;
-		std::string          _buffer;
-		IRCClient*          _fixed;
-		int                  _offset;
-		int                  _index;
-		static t_cstr_vector split(const std::string& params, char delimiter);
-		e_result             m_is_valid(e_type);
-		e_result             m_to_client(std::string);
-		void                 m_to_client(IRCClient&, const std::string&);
-		void                 m_to_channel(const std::string&);
-		void                 m_mode_valid(const char);
-		void                 m_mode_invalid(const char);
-		void                 m_mode_sign(const char);
-		void                 m_mode_initialize();
-		void                 m_bot_initialize();
-		void                 m_disconnect(const std::string&);
+		const std::string*	_target;
+		const std::string*	_target_sub;
+		std::string			_buffer;
+		IRCClient*			_fixed;
+		int					_offset;
+		int					_index;
+
+		static t_cstr_vector	split(const std::string& params, char delimiter);
+		e_result				m_is_valid(e_type);
+		e_result				m_to_client(std::string);
+		void					m_to_client(IRCClient&, const std::string&);
+		void					m_to_channel(const std::string&);
+		void					m_mode_valid(const char);
+		void					m_mode_invalid(const char);
+		void					m_mode_sign(const char);
+		void					m_mode_initialize();
+		void					m_disconnect(const std::string&);
 
 	protected:
 		void           m_to_channels(const std::string&);
