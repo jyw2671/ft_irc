@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 void
-    IRCD::quit()
+    IRCCommand::quit()
 {
     std::string message = "Quit";
     if (_request->parameter.size())

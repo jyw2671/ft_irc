@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_kick(e_phase phase)
+    IRCCommand::m_kick(e_phase phase)
 {
     if (phase == ONE)
     {
@@ -25,7 +25,7 @@ e_result
 }
 
 void
-    IRCD::kick()
+    IRCCommand::kick()
 {
     if (m_kick(ONE) == ERROR)
         return;
@@ -37,8 +37,8 @@ void
         m_to_client(err_need_more_params());
         return;
     }
-    IRCD::t_iter names = param_0.begin();
-    IRCD::t_iter nicks = param_1.begin();
+    IRCCommand::t_iter names = param_0.begin();
+    IRCCommand::t_iter nicks = param_1.begin();
     for (int i = 0, max = std::max(param_0.size(), param_1.size()); i < max;
          ++i)
     {

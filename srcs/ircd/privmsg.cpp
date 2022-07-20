@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_privmsg(e_phase phase)
+    IRCCommand::m_privmsg(e_phase phase)
 {
     if (phase == ONE)
     {
@@ -23,7 +23,7 @@ e_result
 }
 
 void
-    IRCD::privmsg()
+    IRCCommand::privmsg()
 {
     if (m_privmsg(ONE) == ERROR)
         return;

@@ -73,7 +73,6 @@ void
     client.get_buffers().to_client.buffer.append(message);
     _ircserver->toggle(client, EVFILT_READ);
 }
-
 void
     IRCCommand::m_to_channel(const std::string& message)
 {
@@ -106,14 +105,12 @@ void
     }
 }
 
-void
-    IRCCommand::m_disconnect(const std::string& message)
+void IRCCommand::m_disconnect(const std::string& message)
 {
-    _ircserver->m_disconnect(message);
+    _ircserver->irc_disconnect(message);
 }
 
-void
-    IRCCommand::parse_parameter(std::vector<std::string>& parameter)
+void IRCCommand::parse_parameter(std::vector<std::string>& parameter)
 {
     for (_offset = 0;
          (_index = _buffer.find_first_not_of(' ')) != (int)std::string::npos;)

@@ -78,17 +78,17 @@ class IRCMessage
 		std::string cmd_topic_reply();
 		std::string cmd_pong_reply();
 
-		protected:
-			IRCServer*				_ircserver;
-			t_map_irc				_type_to_command;
-			t_map_type				_command_to_type;
-			IRCClient*				_client;
-			IRCChannel*				_channel;
-			IRCClient::t_requests*	_requests;
-			IRCClient::t_request*	_request;
-			IRCClient::t_to_client*	_to_client;
-			std::string				_password;
-			bool					_ascii[127];
+	protected:
+		IRCServer*				_ircserver;
+		t_map_irc				_type_to_command;
+		t_map_type				_command_to_type;
+		IRCClient*				_client;
+		IRCChannel*				_channel;
+		IRCClient::t_requests*	_requests;
+		IRCClient::t_request*	_request;
+		IRCClient::t_to_client*	_to_client;
+		std::string				_password;
+		bool					_ascii[127];
 };
 
 #endif

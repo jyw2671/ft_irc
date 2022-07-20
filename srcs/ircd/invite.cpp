@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_invite()
+    IRCCommand::m_invite()
 {
     if (_request->parameter.size() < 2)
         return m_to_client(err_need_more_params());
@@ -22,7 +22,7 @@ e_result
 }
 
 void
-    IRCD::invite()
+    IRCCommand::invite()
 {
     if (m_invite() == ERROR)
         return;

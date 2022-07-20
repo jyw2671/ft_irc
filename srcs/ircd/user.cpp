@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_user()
+    IRCCommand::m_user()
 {
     if (_request->parameter.size() < 4)
         return m_to_client(err_need_more_params());
@@ -11,7 +11,7 @@ e_result
 }
 
 void
-    IRCD::user()
+    IRCCommand::user()
 {
     if (m_user() == ERROR)
         return;

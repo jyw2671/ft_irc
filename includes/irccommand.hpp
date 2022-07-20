@@ -6,7 +6,7 @@
 
 class IRCCommand : public IRCMessage
 {
-public:
+	public:
 		typedef struct s_map
 		{
 				t_map_client  client;

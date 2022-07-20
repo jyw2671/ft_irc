@@ -52,7 +52,10 @@ void IRCServer::start()
 				IRCServer::irc_accept();
 			//read data from client
 			else if (_events[IRCEvent::_index].filter == EVFILT_READ)
+			{
+				log::print() << "recv func check" << log::endl;
 				IRCServer::irc_receive();
+			}
 			//send data to client
 			else if (_events[IRCEvent::_index].filter == EVFILT_WRITE)
 				IRCServer::irc_send();
@@ -70,16 +73,23 @@ void IRCServer::irc_accept()
 
 void IRCServer::irc_receive()
 {
+	log::print() << "irc_receive start" << log::endl;
 	if (0 < IRCSocket::receive(_events[IRCEvent::_index]))
 	{
+		log::print() << "irc_receive start" << log::endl;
 		IRCClient::t_buffers& buffers = _client->get_buffers();
 		while ((buffers.offset = buffers.buffer.find("\r\n", 0)) != (int)std::string::npos)
 		{
+			log::print() << "irc_receive while start" << log::endl;
 			buffers.requests.queue.push(IRCClient::s_request(buffers.buffer.substr(0, buffers.offset), UNKNOWN));
 			buffers.buffer.erase(0, buffers.offset + 2);
 		}
+		log::print() << "irc_receive while end" << log::endl;
 		if (buffers.requests.queue.size())
+		{
+			log::print() << "command start" << log::endl;
 			irc_command_handler();
+		}
 		//client receive
 		if (_client && _client->get_buffers().to_client.buffer.size())
 			IRCEvent::toggle(EVFILT_READ);
@@ -113,6 +123,7 @@ void IRCServer::irc_command_handler()
 	IRCMessage::_to_client = &_client->get_buffers().to_client;
 	while (_requests->queue.size())
 	{
+		log::print() << "while func check" << log::endl;
 		IRCCommand::parse_request(_requests->queue.front());
 		IRCCommand::_request->type = get_type(_request->command);
 		if (IRCMessage::_request->type != EMPTY && IRCMessage::_request->type != UNKNOWN)
@@ -143,7 +154,7 @@ void IRCServer::irc_command_handler()
 void IRCServer::irc_disconnected(std::string reason)
 {
 	//disconnected
-	log::print() << "fd " << _fd << "disconnected" << log::endl;
+	log::print() << " fd " << _fd << " disconnected" << log::endl;
 	IRCEvent::remove(_fd);
 	IRCCommand::m_to_channels(cmd_quit_reply(reason));
 

@@ -1,7 +1,6 @@
-#include "../../includes/ircd.hpp"
-
+#include "../../includes/irccommand.hpp"
 void
-    IRCD::notice()
+    IRCCommand::notice()
 {
     privmsg();
 }

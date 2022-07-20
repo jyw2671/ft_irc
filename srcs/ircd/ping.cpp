@@ -1,12 +1,12 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 void
-	IRCD::pong()
+	IRCCommand::pong()
 {
 }
 
 void
-	IRCD::ping()
+	IRCCommand::ping()
 {
 	m_to_client(cmd_pong_reply());
 }

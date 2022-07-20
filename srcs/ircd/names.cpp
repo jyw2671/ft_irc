@@ -1,14 +1,14 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_names()
+    IRCCommand::m_names()
 {
     _channel = _map.channel[*_target];
     _buffer  = "= " + _channel->get_name() + " :";
     if (_channel->get_operator())
         _buffer.append("@" + _channel->get_operator()->get_names().nick + " ");
-    Channel::t_citer_member iter = _channel->get_members().begin();
-    Channel::t_citer_member end  = _channel->get_members().end();
+    IRCChannel::t_citer_member iter = _channel->get_members().begin();
+    IRCChannel::t_citer_member end  = _channel->get_members().end();
     for (; iter != end; ++iter)
         _buffer.append((*iter)->get_names().nick + " ");
     m_to_client(rpl_namereply(_buffer));
@@ -18,17 +18,17 @@ e_result
 }
 
 void
-    IRCD::names()
+    IRCCommand::names()
 {
     if (_request->parameter.empty())
     {
-        IRC::t_iter_ch ch_iter = _map.channel.begin();
+        IRCMessage::t_iter_ch ch_iter = _map.channel.begin();
         for (; ch_iter != _map.channel.end(); ++ch_iter)
         {
             _target = &ch_iter->first;
             m_names();
         }
-        IRC::t_iter_cl cl_iter = _map.client.begin();
+        IRCMessage::t_iter_cl cl_iter = _map.client.begin();
         for (; cl_iter != _map.client.end(); ++cl_iter)
             if (cl_iter->second->get_channels().empty())
                 _buffer.append(cl_iter->first + " ");

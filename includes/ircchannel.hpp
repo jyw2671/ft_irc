@@ -82,7 +82,7 @@ class IRCChannel
 		bool	is_joined(IRCClient* client);
 		bool	is_invited(IRCClient* client);
 		bool	is_signed();
-		bool	is_reserve();
+		bool	is_reserved();
 
 		void	join(IRCClient* client);
 		void	part(IRCClient* client);

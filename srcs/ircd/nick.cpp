@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_nick()
+    IRCCommand::m_nick()
 {
     if (_request->parameter.empty())
         return m_to_client(err_no_nickname_given());
@@ -18,11 +18,14 @@ e_result
 }
 
 void
-    IRCD::nick()
+    IRCCommand::nick()
 {
+    log::print() << "nick func check" << log::endl;
     if (m_nick() == ERROR)
+    {
+        log::print() << "nick error" << log::endl;
         return;
-
+    }
     if (_client->is_registered())
     {
         if (_client->get_channels().size())

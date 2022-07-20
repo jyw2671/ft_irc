@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_part(e_phase phase)
+    IRCCommand::m_part(e_phase phase)
 {
     if (phase == ONE)
     {
@@ -20,7 +20,7 @@ e_result
 }
 
 void
-    IRCD::part()
+    IRCCommand::part()
 {
     if (m_part(ONE) == ERROR)
         return;

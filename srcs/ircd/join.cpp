@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_join(e_phase phase, Channel* channel)
+    IRCCommand::m_join(e_phase phase, IRCChannel* channel)
 {
     if (phase == ONE)
     {
@@ -31,13 +31,13 @@ e_result
 }
 
 void
-    IRCD::join()
+    IRCCommand::join()
 {
     if (m_join(ONE) == ERROR)
         return;
     t_cstr_vector channels = split(_request->parameter[0], DELIMITER);
-    IRCD::t_iter  iter     = channels.begin();
-    IRCD::t_iter  end      = channels.end();
+    IRCCommand::t_iter  iter     = channels.begin();
+    IRCCommand::t_iter  end      = channels.end();
     for (; iter != end; ++iter)
     {
         _target = iter.base();
@@ -46,7 +46,7 @@ void
         if (!_map.channel.count(*_target))
         {
             _map.channel.insert(
-                std::make_pair(*_target, new Channel(*_target, _client)));
+                std::make_pair(*_target, new IRCChannel(*_target, _client)));
             _channel = _map.channel[*_target];
         }
         else

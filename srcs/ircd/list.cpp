@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_list()
+    IRCCommand::m_list()
 {
 	int member_number = _channel->get_members().size()
 		+ _channel->get_operator() == nullptr ? 0 : 1;
@@ -12,11 +12,11 @@ e_result
 }
 
 void
-    IRCD::list()
+    IRCCommand::list()
 {
     if (_request->parameter.empty())
     {
-        IRC::t_iter_ch iter = _map.channel.begin();
+        IRCMessage::t_iter_ch iter = _map.channel.begin();
         for (_channel = iter->second; iter != _map.channel.end();
              _channel = (++iter)->second)
             m_list();
