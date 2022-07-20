@@ -238,6 +238,13 @@ void	IRCSocket::socket_bind(int port)
 	}
 	/**
 	inet_ntoa
+	- char *inet_ntoa(struct in_addr in)
+	- network byte order의 주소를 a.b.c.d 형태인 IPv4 주소 형태의 문자열로 반환합니다.
+	- struct in_addr은 AF_INET address family 주소 체계에 포함된 구조입니다.
+	- accept, getpeername, getsockname 등으로 얻은 주소 정보입니다.
+	- return
+		- a.b.c.d와 같은 IPv4 주소
+		- 숫자 점 표기법의 IP주소
 	*/
 	log::print() << "socket bind succeeded " << port << " ip " << inet_ntoa(_socket.addr.sin_addr) << log::endl;
 }
@@ -288,6 +295,7 @@ void	IRCSocket::socket_close()
 /**
  * @brief accept()
  *
+ *
  * Client의 접속 요청을 기다리고 요청이 오면 client와 연결한다.
  *
  * 1. accept()로 접속요청을 허락하게되면 client와 통신을 하기위해서 커널이 자동으로 socket(client socket)을 생성한다.
@@ -325,6 +333,35 @@ int		IRCSocket::accept()
 		allowing it to return any data that the system has in it's read buffer
 		for that socket, but it won't wait for that data
 	*/
+	/**
+	 * @brief fcntl
+	 * 
+	 * - int fcntl(int fd, int cmd, long arg)
+	 * - fcntl을 사용해서 할 수 있는 일은 cmd로 결정됩니다.
+	 * - 과제에서 요구하는 fcntl의 사용법은 fcntl(fd, F_SETFL, O_NONBLOCK)로 정해져 있습니다.
+	 * - 이 이외의 인자를 사용하면 0점
+	 * 
+	 * - F_SETFL : 파일 지정자에 대한 값을 설정
+	 * - O_NONBLOCK : fd를 NON_BLOCK 모드로 설정
+	 *  - NON_BLOCK으로 fd를 변경하게 되면 read/write/send/recv/connect 등 기본적으로 BLOCK으로 사용되던 함수들이 NON_BLOCK으로 동작합니다.
+	 * 
+	 * - read/recv
+	 *  - BLOCK : read 버퍼가 비었을 때 block
+	 *  - NON_BLOCK : read 버퍼가 비었을 때 -1을 반환, errno는 EWOULDBLOCK/EAGAIN 설정
+	 * 
+	 * - write/send
+	 *  - BLOCK : write 버퍼가 비었을 때 block
+	 *  - NON_BLOCK : write 버퍼가 비었을 때 -1을 반환, errno는 EWOULDBLOCK/EAGAIN 설정
+	 * 
+	 * - accept
+	 *  - BLOCK : backlog(현재 connection 요청 큐)가 비었을 때 block
+	 *  - NON_BLOCK : backlog(현재 connection 요청 큐)가 비었을 때 -1을 반환, errno는 EWOULDBLOCK/EAGAIN 설정
+	 * 
+	 * - connect
+	 *  - BLOCK : connection이 완전히 이루어질 때 까지 block
+	 *  - NON_BLOCK :connection이 완전히 이루어지지 않아도 return되며, -1의 값을 반환하고 나중에 getsockopt로 확인할 수 있다. (getsockopt는 허용함수가 아니다). errno는 EWOULDBLOCK/EAGAIN 설정
+	 */
+	
 	return (_fd);
 }
 
@@ -332,7 +369,7 @@ int		IRCSocket::accept()
  * @brief receive
  *
  * 1. recv()를 이용하여 client로 부터 전송된 자료를 읽어들인다.
- * 2. client로 부터 전송된 자료가 없다면 송신할 때까지 대기하게 된다. block된 상태
+ * 2. client로 부터 전송된 자료가 없다면 수신할 때까지 대기하게 된다. block된 상태
  *
  * recv() function
  * @param event
@@ -340,8 +377,29 @@ int		IRCSocket::accept()
  */
 ssize_t	IRCSocket::receive(const struct kevent& event)
 {
+	/**
+	recv()
+	- ssize_t recv(int sockfd, void *buf, size_t len, int flags)
+	- sockfd : connect, accept로 연결된 socket descriptor
+	- buf : data를 수신하여 저장할 버퍼
+	- len : 읽을 데이터의 크기
+	- flags : 읽을 데이터 유형 또는 읽는 방법에 대한 옵션
+		- MSG_OOB : out of band(긴급 데이터) 데이터를 읽음, 주로 X.25에서 접속이 끊겼을 때 전송되는 데이터
+		- MSG_PRRK : receive queue의 데이터를 queue에서 제거하지 않고 확인하기 위한 목적으로 설정
+		- MSG_WAILALL : 읽으려는 데이터가 버퍼에 찰 때까지 대기
+		- 0 : 일반 데이터를 수신하고 read와 같은 동작을 합니다.
+	- return
+		- 성공 시 : 0이상, - 정상적으로 데이터를 수신하였으며, 실제로 수신한 데이터의 길이를 return합니다.
+		- 실패 시 : -1, 오류 발생, 상세한 오류 내용은 errno에 저장됩니다.
+	*/
 	_fd = event.ident;
 	_result = ::recv(_fd, _buffer, event.data, 0);
+	/**
+	 * @brief
+	 * client 쪽에서 전송한 데이터가 없으면 socket_close
+	 * 서버는 종료하지않고 다른 event처리, 즉 다른 client와 통신을 위해 대기합니다.
+	 * 
+	 */
 	if (!_result)
 		socket_close();
 	return (_result);
@@ -350,18 +408,50 @@ ssize_t	IRCSocket::receive(const struct kevent& event)
 /**
  * @brief send
  *
+ * 1. 수신된 데이터의 길이를 구하여 전송데이터를 준비합니다.
+ * 2. send(write)를 이용하여 client로 자료를 송신합니다.
  * send() function
  * @param event
  * @return ssize_t
  */
 ssize_t	IRCSocket::send(const struct kevent& event)
 {
+	/**
+	 * @brief send()
+	 * 
+	 * ssize_t send(int sockfd, const void *buf, size_t len, int flags)
+	 * - sockfd : connect, accept로 연결된 socket descriptor
+	 * - buf : 전송할 데이터를 저장할 버터
+	 * - len : 전송할 데이터의 길이
+	 * - flags
+	 *  - 전송할 데이터 또는 읽는 방법에 대한 옵션, 0 또는 bit 연산으로 설정가능
+	 *  - MSG_DONTTROUTE : gateway를 통하지 않고 직접 상대에게 전달
+	 *  - MSG_DONTWAIT : nonblocking에서 사용하는 옵션, 전송이 block되면 EAGIN, EWOULDBLOCK 오류로 바로 반환
+	 *  - MSG_MORE : 전송할 데이터가 남아있음을 설정
+	 *  - MSG_OOB : out of band 데이터를 읽습니다. 주로 X.25에서 접속이 끊겼을 때에 전송되는 데이터 flags 값이 0이면 일반 데이터를 전송하며, write를 호출한 것과 같습니다.
+	 *  - flag를 설정하지 않는 경우 write와 같은 동작을 합니다.
+	 * - return
+	 *  - 성공 시 : 0이상, - 정상적으로 데이터를 전송하였으며, 실제로 전송된 데이터의 길이를 return합니다.
+	 *  - 실패 시 : -1, 오류 발생, 상세한 오류 내용은 errno에 저장됩니다.
+	 */
 	IRCClient::t_to_client& to_client = ((IRCClient*)event.udata)->get_buffers().to_client;
 	_remain = to_client.buffer.size() - to_client.offset;
 	_result = ::send(event.ident, to_client.buffer.data() + to_client.offset, event.data < _remain ? event.data : _remain, 0);
 	return (_result);
 }
 
+/**
+ * @brief 채널에서 해당 세션을 닫는 처리를 합니다.
+ *
+ * @details 여기에서 세션 맵에 있는 세션의 공유포인터가 std::map의 erase 메서드로 삭제됩니다.
+ * 이후, 공유 포인터에 저장된 세션의 실제 포인터가 참조 카운트에 따라 자동으로 삭제될 것입니다.
+ *
+ * 참조 카운트에 따라 자동으로 삭제되면 해당 소멸자에서 소켓 fd의 close 및 kqueue에서 이벤트 등록해제 등이 모두 이루어집니다.
+ *
+ * @param session 세션을 닫는 처리를 할 Session 포인터 입니다.
+ *
+ * @exception 이벤트 해제가 일부라도 실패할 경우 std::runtime_error 예외가 발생합니다.
+ */
 void IRCSocket::close(int fd)
 {
 	::close(fd);

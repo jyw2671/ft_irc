@@ -78,8 +78,8 @@ public:
 		void mode();
 		void privmsg();
 		void notice();
-	void ping();
-	void pong();
+		void ping();
+		void pong();
 		void unknown()
 		{
 				m_to_client(err_unknown_command());

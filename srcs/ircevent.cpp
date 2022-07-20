@@ -1,4 +1,4 @@
-#include "ircevent.hpp"
+#include "../includes/ircevent.hpp"
 
 /**
  * @brief Construct a new IRCEvent::IRCEvent object
@@ -152,11 +152,11 @@ void IRCEvent::remove(int fd)
 void IRCEvent::toggle(int EVFILT_TYPE)
 {
 	event_set(_events[_index].ident, EVFILT_TYPE, EV_DISABLE, 0, 0, (IRCClient*)_events[_index].udata);
-	event_set(_events[_index].ident, EVFILT_TYPE == EVFILT_READ ? EVFILT_WRITE : EVFILT_READ, EV_ENABLE, 0, 0, (IRCClient*)_events[_index].udata);
+	event_set(_events[_index].ident, (EVFILT_TYPE == EVFILT_READ ? EVFILT_WRITE : EVFILT_READ), EV_ENABLE, 0, 0, (IRCClient*)_events[_index].udata);
 }
 
 void IRCEvent::toggle(IRCClient& client, int EVFILT_TYPE)
 {
 	event_set(client.get_fd(), EVFILT_TYPE, EV_DISABLE, 0, 0, &client);
-	event_set(client.get_fd(), EVFILT_TYPE == EVFILT_READ ? EVFILT_WRITE : EVFILT_READ, EV_ENABLE, 0, 0, &client);
+	event_set(client.get_fd(), (EVFILT_TYPE == EVFILT_READ ? EVFILT_WRITE : EVFILT_READ), EV_ENABLE, 0, 0, &client);
 }
