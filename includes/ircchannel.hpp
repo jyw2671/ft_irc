@@ -8,10 +8,10 @@ class IRCClient;
 class IRCChannel
 {
 	public:
-		typedef std::string		t_str_info;
+		typedef std::string				t_str_info;
 		typedef std::vector<IRCClient*>	t_vector_memver;
-		typedef std::set<IRCClient*>		t_set_invitee;
-		typedef t_vector_memver::const_iterator t_citer_member;
+		typedef std::set<IRCClient*>	t_set_invitee;
+		typedef t_vector_memver::const_iterator	t_citer_member;
 
 		typedef union
 		{
@@ -82,7 +82,7 @@ class IRCChannel
 		bool	is_joined(IRCClient* client);
 		bool	is_invited(IRCClient* client);
 		bool	is_signed();
-		bool	is_reserve();
+		bool	is_reserved();
 
 		void	join(IRCClient* client);
 		void	part(IRCClient* client);

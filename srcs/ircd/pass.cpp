@@ -1,7 +1,7 @@
-#include "../../includes/ircd.hpp"
+#include "../../includes/irccommand.hpp"
 
 e_result
-    IRCD::m_pass()
+    IRCCommand::m_pass()
 {
     if (_request->parameter.empty())
         return m_to_client(err_need_more_params());
@@ -13,7 +13,7 @@ e_result
 }
 
 void
-    IRCD::pass()
+    IRCCommand::pass()
 {
     if (m_pass() == ERROR)
         return;

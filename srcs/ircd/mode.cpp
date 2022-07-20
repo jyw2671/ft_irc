@@ -1,19 +1,18 @@
-#include "../../includes/ircd.hpp"
-
+#include "../../includes/irccommand.hpp"
 void
-    IRCD::m_mode_sign(const char c)
+    IRCCommand::m_mode_sign(const char c)
 {
     _channel->reserve_sign(c);
 }
 
 void
-    IRCD::m_mode_valid(const char c)
+    IRCCommand::m_mode_valid(const char c)
 {
     _channel->reserve_flags(c);
 }
 
 void
-    IRCD::m_mode_invalid(const char c)
+    IRCCommand::m_mode_invalid(const char c)
 {
     if (_ascii[(int)c])
         return;
@@ -22,7 +21,7 @@ void
 }
 
 e_result
-    IRCD::parse_flag(const std::string& flag)
+    IRCCommand::parse_flag(const std::string& flag)
 {
     std::string result;
 
@@ -47,7 +46,7 @@ e_result
 }
 
 e_result
-    IRCD::m_mode(e_phase phase)
+    IRCCommand::m_mode(e_phase phase)
 {
     if (phase == ONE)
     {
@@ -66,7 +65,7 @@ e_result
     {
         for (int i = 0, size = _request->parameter[1].size(); i < size; ++i)
             if ((unsigned)_request->parameter[1][i] - 32 < 127)
-                (this->*IRCD::_modes[(int)_request->parameter[1][i]])(
+                (this->*IRCCommand::_modes[(int)_request->parameter[1][i]])(
                     _request->parameter[1][i]);
         std::memset((void*)_ascii, 0, sizeof(_ascii));
         if (!_channel->is_reserved())
@@ -86,7 +85,7 @@ e_result
 }
 
 void
-    IRCD::mode()
+    IRCCommand::mode()
 {
     if (m_mode(ONE) == ERROR)
         return;
@@ -113,14 +112,14 @@ void
 }
 
 void
-    IRCD::m_mode_initialize()
+    IRCCommand::m_mode_initialize()
 {
     for (int i = 0; i < 127; ++i)
-        _modes[i] = &IRCD::m_mode_invalid;
-    _modes[(int)'+'] = &IRCD::m_mode_sign;
-    _modes[(int)'-'] = &IRCD::m_mode_sign;
-    _modes[(int)'i'] = &IRCD::m_mode_valid;
-    _modes[(int)'n'] = &IRCD::m_mode_valid;
-    _modes[(int)'t'] = &IRCD::m_mode_valid;
+        _modes[i] = &IRCCommand::m_mode_invalid;
+    _modes[(int)'+'] = &IRCCommand::m_mode_sign;
+    _modes[(int)'-'] = &IRCCommand::m_mode_sign;
+    _modes[(int)'i'] = &IRCCommand::m_mode_valid;
+    _modes[(int)'n'] = &IRCCommand::m_mode_valid;
+    _modes[(int)'t'] = &IRCCommand::m_mode_valid;
     std::memset((void*)_ascii, 0, sizeof(_ascii));
 }

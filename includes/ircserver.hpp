@@ -11,7 +11,7 @@
 class IRCServer : public IRCSocket, public IRCEvent, public IRCCommand
 {
 	public:
-		friend class IRCommand;
+		friend class IRCCommand;
 
 		IRCServer(int port, const std::string password);
 		~IRCServer();

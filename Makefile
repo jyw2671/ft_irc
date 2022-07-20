@@ -7,13 +7,12 @@ srcs		= main.cpp\
 			  ircserver.cpp\
 			  ircchannel.cpp\
 			  ircclient.cpp\
+			  irccommand.cpp\
 			  ircevent.cpp\
 			  ircsocket.cpp\
 			  ircmessage.cpp\
 			  irclog.cpp\
-			  irccommand.cpp\
 			  ircd/invite.cpp\
-			  ircd/ircd_bot.cpp\
 			  ircd/join.cpp\
 			  ircd/kick.cpp\
 			  ircd/list.cpp\

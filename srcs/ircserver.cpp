@@ -36,7 +36,6 @@ void IRCServer::start()
 	//아직 처리되지 않은(pending 상태) 이벤트의 개수를 저장하기 위한 변수
 	int count;
 
-	log::print() << "IRCServer is starting" << log::endl;
 	while (true)
 	{
 		count = IRCEvent::kevent();
@@ -73,6 +72,7 @@ void IRCServer::irc_receive()
 	if (0 < IRCSocket::receive(_events[IRCEvent::_index]))
 	{
 		IRCClient::t_buffers& buffers = _client->get_buffers();
+		buffers.buffer.append(IRCSocket::_buffer, IRCSocket::_result);
 		while ((buffers.offset = buffers.buffer.find("\r\n", 0)) != (int)std::string::npos)
 		{
 			buffers.requests.queue.push(IRCClient::s_request(buffers.buffer.substr(0, buffers.offset), UNKNOWN));
@@ -143,7 +143,7 @@ void IRCServer::irc_command_handler()
 void IRCServer::irc_disconnected(std::string reason)
 {
 	//disconnected
-	log::print() << "fd " << _fd << "disconnected" << log::endl;
+	log::print() << " fd " << _fd << " disconnected" << log::endl;
 	IRCEvent::remove(_fd);
 	IRCCommand::m_to_channels(cmd_quit_reply(reason));
 

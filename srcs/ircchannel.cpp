@@ -184,7 +184,7 @@ bool	IRCChannel::is_signed()
 {
 		return (_reserved.sign.state);
 }
-bool	IRCChannel::is_reserve()
+bool	IRCChannel::is_reserved()
 {
 		return (_reserved.flag.state);
 }

@@ -16,7 +16,7 @@
 
 #define CHANNEL_USER_MAX	42
 #define CHANNEL_LENGTH_MAX	50
-#define CLIENT_CHANNEL_MAX	10
+#define CLIENT_CAHNNEL_MAX	10
 #define NICK_LENGTH_MAX	9
 #define EVENTS_MAX	1024
 #define SPECIALCHAR	"[]\\`-^{|}"
