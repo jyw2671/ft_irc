@@ -12,21 +12,10 @@ srcs		= main.cpp\
 			  ircsocket.cpp\
 			  ircmessage.cpp\
 			  irclog.cpp\
-			  ircd/invite.cpp\
-			  ircd/join.cpp\
-			  ircd/kick.cpp\
-			  ircd/list.cpp\
-			  ircd/mode.cpp\
-			  ircd/names.cpp\
-			  ircd/nick.cpp\
-			  ircd/notice.cpp\
-			  ircd/part.cpp\
-			  ircd/pass.cpp\
-			  ircd/privmsg.cpp\
-			  ircd/quit.cpp\
-			  ircd/topic.cpp\
-			  ircd/user.cpp\
-			  ircd/ping.cpp
+			  ircd/channel_operations.cpp\
+			  ircd/connection_messages.cpp\
+			  ircd/sending_messages.cpp\
+			  ircd/mode.cpp
 
 SRCS    	= $(srcs:%=srcs/%)
 
