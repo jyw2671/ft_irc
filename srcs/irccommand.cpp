@@ -2,9 +2,7 @@
 #include "../includes/ircmessage.hpp"
 #include <sstream>
 
-
-IRCCommand::t_cstr_vector
-    IRCCommand::split(const std::string& params, char delimiter)
+IRCCommand::t_cstr_vector IRCCommand::split(const std::string& params, char delimiter)
 {
     IRCCommand::t_cstr_vector splited;
     std::istringstream  iss(params);
@@ -15,8 +13,7 @@ IRCCommand::t_cstr_vector
     return splited;
 }
 
-e_type
-    IRCCommand::get_type(const std::string& command)
+e_type IRCCommand::get_type(const std::string& command)
 {
     if (_command_to_type.count(command))
         return _command_to_type[command];
@@ -29,8 +26,7 @@ static inline bool
     return std::memchr(SPECIALCHAR, c, 9);
 }
 
-e_result
-    IRCCommand::m_is_valid(e_type type)
+e_result IRCCommand::m_is_valid(e_type type)
 {
     if (type == NICK)
     {
@@ -60,21 +56,18 @@ e_result
     return OK;
 }
 
-e_result
-    IRCCommand::m_to_client(std::string message)
+e_result IRCCommand::m_to_client(std::string message)
 {
     _to_client->buffer.append(message);
     return ERROR;
 }
 
-void
-    IRCCommand::m_to_client(IRCClient& client, const std::string& message)
+void IRCCommand::m_to_client(IRCClient& client, const std::string& message)
 {
     client.get_buffers().to_client.buffer.append(message);
     _ircserver->toggle(client, EVFILT_READ);
 }
-void
-    IRCCommand::m_to_channel(const std::string& message)
+void IRCCommand::m_to_channel(const std::string& message)
 {
     IRCChannel::t_citer_member iter = _channel->get_members().begin();
     IRCChannel::t_citer_member end  = _channel->get_members().end();
@@ -85,8 +78,7 @@ void
             m_to_client(**iter, message);
 }
 
-void
-    IRCCommand::m_to_channels(const std::string& message)
+void IRCCommand::m_to_channels(const std::string& message)
 {
     IRCClient::t_citer   iter = _client->get_channels().begin();
     IRCClient::t_citer   end  = _client->get_channels().end();
@@ -130,8 +122,7 @@ void IRCCommand::parse_parameter(std::vector<std::string>& parameter)
     _buffer.clear();
 }
 
-void
-    IRCCommand::parse_command(std::string& command)
+void IRCCommand::parse_command(std::string& command)
 {
     for (_offset = 0; (command[_offset] != ' ' && command[_offset] != '\0');
          ++_offset)
@@ -141,8 +132,7 @@ void
     command.erase(_offset);
 }
 
-void
-    IRCCommand::parse_request(IRCClient::t_request& request)
+void IRCCommand::parse_request(IRCClient::t_request& request)
 {
     _request = &request;
     if (_request->command.size() && (_request->command.front() == ':'))
@@ -158,8 +148,7 @@ void
     }
 }
 
-void
-    IRCCommand::registration()
+void IRCCommand::registration()
 {
     _map.client[_client->get_names().nick] = _client;
     m_to_client(rpl_welcome());

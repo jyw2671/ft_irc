@@ -21,7 +21,6 @@ IRCClient::~IRCClient()
 }
 
 //getter
-
 sockaddr_in	IRCClient::get_addr()
 {
 	return (_addr);
