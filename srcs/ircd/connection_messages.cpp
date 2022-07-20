@@ -113,7 +113,7 @@ void IRCCommand::user()
 }
 
 /**
- * @brief user
+ * @brief quit
  *
  * - server에 대한 client 연결을 종료하는 명령어
  * - client가 보낸 QUIT 명령에 의해 연결이 종료되면
@@ -130,4 +130,40 @@ void IRCCommand::quit()
 	if (_request->parameter.size())
 		message += " :" + _request->parameter[0];
 	m_disconnect(message);
+}
+
+
+/**
+ * @brief 연결을 확인하는 명령어
+ */
+
+/**
+ * @brief ping
+ *
+ * - 연결된 상대방이 아직 연결되어 있는지 체크하는 명령어
+ * - 연결 대기 시간을 확인하기 위해 클라이언트나 서버에서 보냄.
+ * - PING 메시지 수신할 때 클라이언트 서버는 동일한 token값을 가진 PONG 메시지로 응답해야 함.
+ * - 다음의 상황일 때 PING 명령을 무시하고 서버는 에러를 응답함.
+ * 		token이 주어지지 않을 때
+ * - 명령어 형식
+ * 		PING <token(non-empty string)>
+ */
+
+void IRCCommand::ping()
+{
+	m_to_client(cmd_pong_reply());
+}
+
+/**
+ * @brief pong
+ *
+ * - PING 명령의 응답으로 사용됨.
+ * - PONG은 PING의 token과 같아야 함.
+ * - 명령어 형식
+ * 		PONG <token(non-empty string)>
+ * 		서브젝트에서 요구하는 특이 케이스
+ */
+
+void IRCCommand::pong()
+{
 }
