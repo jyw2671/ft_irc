@@ -147,6 +147,12 @@ void IRCServer::irc_receive()
 void IRCServer::irc_send()
 {
 	IRCMessage::_to_client = &_client->get_buffers().to_client;
+	/**
+	 * @brief send
+	 *
+	 * 보낼 메시지가 없으면 return;
+	 *
+	 */
 	if (IRCMessage::_to_client->buffer.empty())
 		return;
 	if (0 <= IRCSocket::send(_events[IRCEvent::_index]))
@@ -184,8 +190,7 @@ void IRCServer::irc_command_handler()
 		/**
 		 * @brief
 		 * _request에 들어있는 type을 파악하여 비어있거나 알 수 없는 명령어인지 확인
-		 *
-		 *
+		 * parse_request에서 size를 확인하고 :를 통해 명령어가 들어오는 경우도 있으니 확인한다.
 		 */
 		IRCCommand::parse_request(_requests->queue.front());
 		IRCCommand::_request->type = get_type(_request->command);
@@ -200,8 +205,6 @@ void IRCServer::irc_command_handler()
 			 *
 			 * type < CONNECTION(4) == PASS, NICK, USER
 			 * type = 4 == QUIT
-			 *
-			 *
 			 */
 			if (((unsigned)(IRCMessage::_request->type - 1)) < CONNECTION)
 			{
@@ -230,7 +233,13 @@ void IRCServer::irc_command_handler()
 	IRCMessage::_requests = nullptr;
 	IRCMessage::_to_client = nullptr;
 }
-
+/**
+ * @brief irc_disconnected()
+ *
+ * client에서 수신할 메시지가 없으면 연결을 종료한다.
+ *
+ * @param reason
+ */
 void IRCServer::irc_disconnected(std::string reason)
 {
 	//disconnected
@@ -258,6 +267,13 @@ void IRCServer::irc_disconnected(std::string reason)
 	_client = nullptr;
 }
 
+/**
+ * @brief irc_disconnect
+ *
+ * quit 명령어가 들어왔을 경우 client fd close 후 연결을 해제한다.
+ *
+ * @param reason
+ */
 void IRCServer::irc_disconnect(std::string reason)
 {
 	IRCSocket::close(_client->get_fd());

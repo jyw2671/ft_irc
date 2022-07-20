@@ -1,6 +1,11 @@
 #include "../includes/ircclient.hpp"
 #include "../includes/irccommand.hpp"
 
+/**
+ * @brief IRCMessage
+ *
+ * IRC ERROR MESSAGE
+ */
 IRCMessage::IRCMessage() : endl("\r\n")
 {
 	_command_to_type.insert(std::make_pair("", EMPTY));

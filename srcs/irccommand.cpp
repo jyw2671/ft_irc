@@ -63,6 +63,16 @@ e_result IRCCommand::m_is_valid(e_type type)
 	return OK;
 }
 
+/**
+ * @brief function with command
+ *
+ * m_to_client(std::string message)
+ * m_to_client(IRCClient& client, const std::string& message)
+ * m_to_channel(const std::string& message)
+ * m_to_channels(const std::string& message)
+ * @param message
+ * @return e_result
+ */
 e_result IRCCommand::m_to_client(std::string message)
 {
 	_to_client->buffer.append(message);
@@ -74,6 +84,7 @@ void IRCCommand::m_to_client(IRCClient& client, const std::string& message)
 	client.get_buffers().to_client.buffer.append(message);
 	_ircserver->toggle(client, EVFILT_READ);
 }
+
 void IRCCommand::m_to_channel(const std::string& message)
 {
 	IRCChannel::t_citer_member iter = _channel->get_members().begin();
@@ -109,10 +120,14 @@ void IRCCommand::m_disconnect(const std::string& message)
 	_ircserver->irc_disconnect(message);
 }
 
+/**
+ * @brief parse_parameter
+ *
+ * @param parameter
+ */
 void IRCCommand::parse_parameter(std::vector<std::string>& parameter)
 {
-	for (_offset = 0;
-		 (_index = _buffer.find_first_not_of(' ')) != (int)std::string::npos;)
+	for (_offset = 0; (_index = _buffer.find_first_not_of(' ')) != (int)std::string::npos;)
 	{
 		_offset = _buffer.find_first_of(' ', _index);
 		if ((_offset != (int)std::string::npos) && _buffer[_index] != ':')
@@ -129,22 +144,47 @@ void IRCCommand::parse_parameter(std::vector<std::string>& parameter)
 	_buffer.clear();
 }
 
+/**
+ * @brief parse_command
+ *
+ * @param command
+ */
 void IRCCommand::parse_command(std::string& command)
 {
-	for (_offset = 0; (command[_offset] != ' ' && command[_offset] != '\0');
-		 ++_offset)
+	for (_offset = 0; (command[_offset] != ' ' && command[_offset] != '\0'); ++_offset)
 		if ((unsigned)command[_offset] - 'a' < 26)
 			command[_offset] ^= 0b100000;
 	_buffer = command.substr(_offset);
 	command.erase(_offset);
 }
 
+/**
+ * @brief parse_request
+ *
+ * client에서 입력받은 메시지를 파악하여 parsing
+ *
+ * @param request
+ */
 void IRCCommand::parse_request(IRCClient::t_request& request)
 {
 	_request = &request;
 	if (_request->command.size() && (_request->command.front() == ':'))
 	{
+		/**
+		 * @brief find_first_of
+		 *
+		 * 주어진 문자열에서 함수의 인자로 전달된 문자열의 문자들 중 첫 번째로 나타나는 문자의 위치를 찾는다.
+		 * 예를 들어서 주어진 문자열이 "chewing c" 이고 "def" 를 인자로 전달한다면, d, e, f 중에 e 가 가장 처음에 나타나므로 (3 번째),
+		 * e 의 위치인 2 가 리턴됩니다 (맨 첫번째가 0 이니까요).
+		 *
+		 * 처음으로 공백이 나오는 위치
+		 */
 		_request->command.erase(0, _request->command.find_first_of(' '));
+		/**
+		 * @brief find_first_not_of
+		 *
+		 * 전달된 문자들 중 첫 번째로 일치하지 않는 것의 위치를 찾는다.
+		 */
 		_request->command.erase(0, _request->command.find_first_not_of(' '));
 	}
 	if (_request->command.size())
