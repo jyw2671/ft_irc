@@ -8,9 +8,9 @@ class IRCClient;
 class IRCChannel
 {
 	public:
-		typedef std::string				t_str_info;
-		typedef std::vector<IRCClient*>	t_vector_memver;
-		typedef std::set<IRCClient*>	t_set_invitee;
+		typedef std::string						t_str_info;
+		typedef std::vector<IRCClient*>			t_vector_memver;
+		typedef std::set<IRCClient*>			t_set_invitee;
 		typedef t_vector_memver::const_iterator	t_citer_member;
 
 		typedef union
@@ -47,24 +47,24 @@ class IRCChannel
 		bool	m_set_status(const bool&, unsigned char&);
 		const IRCChannel::t_citer_member	find(IRCClient* client);
 
-		std::string	_name;
-		std::string	_topic;
+		std::string		_name;
+		std::string		_topic;
 		IRCClient*		_operator;
 		t_vector_memver	_members;
-		t_status	_status;
-		t_reserved	_reserved;
+		t_status		_status;
+		t_reserved		_reserved;
 		t_set_invitee	_invitees;
 	public:
 		IRCChannel(const std::string& name, IRCClient* client);
 		~IRCChannel();
 
 		//getter
-		const std::string&	get_name() const;
-		const std::string&	get_topic() const;
+		const std::string&		get_name() const;
+		const std::string&		get_topic() const;
 		const t_vector_memver&	get_members();
-		bool	get_status(e_type type);
-		std::string	get_status();
-		IRCClient*	get_operator();
+		bool					get_status(e_type type);
+		std::string				get_status();
+		IRCClient*				get_operator();
 
 		//setter
 		void	set_name(const std::string& name);
