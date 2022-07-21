@@ -1,12 +1,14 @@
 #include "../../includes/irccommand.hpp"
-//privmsg, notice
-
 
 /**
  * @brief privmsg
  *
+ * - 채널이나 클라이언트에게 보내는 메시지
+ * - PRIVMSG 는 유저 끼리 귓속말을 하는 역할을 한다.
+ * - 채널에서 하는 채팅은 PRIVMSG를 채널로 보내는 방식으로 동작한다.
  * - 명령어 형식
- *
+ * 		privmsg user :message
+ * 		:user1 PRIVMSG user2 :message
  */
 
 e_result IRCCommand::m_privmsg(e_phase phase)
@@ -52,8 +54,9 @@ void IRCCommand::privmsg()
 /**
  * @brief notice
  *
+ * - 통지 (자동 회신을 원하지 않는 메시지)
  * - 명령어 형식
- *
+ *		notice #channel :message
  */
 
 void IRCCommand::notice()
