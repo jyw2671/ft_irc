@@ -2,15 +2,22 @@
 
 /**
  * @brief 채널 명령어
- *
- * - 위 등록 절차를 완료하면 서버로부터 환영 메시지(rpl_welcome)를 받음.
  */
 
 /**
  * @brief join
  *
- * - 명령어 형식
+ * - 클라이언트가 특정 채널에 가입할 때 사용함.
+ * - 다음과 같은 상황일 때 join 명령을 무시하고 서버가 에러를 응답함.
+ * 		파라미터 개수가 형식보다 적을 때
+ * 		클라이언트가 참여할 수 있는 채널의 최대 수에 도달했을 때
+ * 		키가 필요한 채널에 키가 잘못되었거나 제공되지 않았을 때
+ * 		채널이 유효하지 않을 때
+ * 		채널이 수용할 수 있는 클라이언트의 최대 수에 도달했을 때
+ * 		채널이 invite-only 모드인 데 채널 관리자로부터 초대를 받지 않았을 때
  *
+ * - 명령어 형식
+ * 		join [해당 채널]
  */
 
 e_result IRCCommand::m_join(e_phase phase, IRCChannel* channel)
@@ -81,8 +88,10 @@ void IRCCommand::join()
 /**
  * @brief part
  *
+ * - 클라이언트가 채널에서 나올 때 사용하는 명령어
  * - 명령어 형식
- *
+ * 		PART #A : 채널 #A에서 나가기
+ * 		PART #B,&C : 채널 #B,&C에서 나가기
  */
 
 e_result IRCCommand::m_part(e_phase phase)
@@ -130,8 +139,10 @@ void IRCCommand::part()
 /**
  * @brief names
  *
+ * - 볼 수 있는 모든 채널에서 볼 수 있는 모든 닉네임을 출력.
  * - 명령어 형식
- *
+ * 		NAMES
+ *		NAMES #ch1
  */
 
 e_result IRCCommand::m_names()
@@ -187,8 +198,12 @@ void IRCCommand::names()
 /**
  * @brief list
  *
+ * - 채널과 해당 주제를 나열.
+ * 		채널 파라미터가 생략되면 개설된 채널 모두의 상태를 나열.
+ * 		채널 파라미터가 있으면 해당 채널 상태만 나열.
  * - 명령어 형식
- *
+ *		list
+ * 		list #channel
  */
 
 e_result IRCCommand::m_list()
@@ -226,8 +241,9 @@ void IRCCommand::list()
 /**
  * @brief topic
  *
+ * - 채널의 주제를 보여주거나 주제를 변경할 때 사용하는 명령어
  * - 명령어 형식
- *
+ *		topic #channel :topic~
  */
 
 e_result IRCCommand::m_topic()
@@ -270,8 +286,21 @@ void IRCCommand::topic()
 /**
  * @brief invite
  *
+ * - user를 초대함
+ * - 초대 전용 모드가 아닐 때
+ * 		실제로 해당 유저가 join 요청을 해야 멤버가 됨.
+ * 		따라서 초대 전용 모드가 아니면 invite 명령어는 의미없음.
+ * - 에러의 경우
+ * 		파라미터 개수가 2 미만일 때
+ * 		클라이언트가 존재하지 않을 때
+ * 		채널이 존재하지 않을 때
+ * 		초대하려는 클라이언트가 채널에 없을 때
+ * 		초대 대상이 이미 채널 구성원일 때
  * - 명령어 형식
- *
+ *		invite nick #channel
+ * 		:user1 invite user2 #channel
+ * 	 - 초대 전용인 채널에 유저를 초대하려면
+ * 			초대를 보내는 클라이언트가 해당 채널의 채널 운영자로 인식되어야 함.
  */
 
 e_result IRCCommand::m_invite()
@@ -307,8 +336,17 @@ void IRCCommand::invite()
 /**
  * @brief kick
  *
+ * - 채널 관리자가 채널에 있는 인원을 추방 시킬 때 사용하는 명령어
+ * - 에러의 경우
+ * 		파라미터의 개수가 2개 미만일 때
+ * 		채널이름과 닉네임 개수가 1:n, n:1이 아닐 때
+ * 		채널이름과 닉네임 개수가 같지 않을 때
+ * 		채널이 유효하지 않을 때
+ * 		채널 관리자가 아닐 때
+ * 		클라이언트가 존재하지 않을 때
+ * 		강퇴 대상이 채널에 이미 없을 때
  * - 명령어 형식
- *
+ *		kick #channel user
  */
 
 e_result IRCCommand::m_kick(e_phase phase)
