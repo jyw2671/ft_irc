@@ -2,6 +2,17 @@
 #include "../includes/ircclient.hpp"
 #include "../includes/irclog.hpp"
 
+/**
+ * @brief Construct a new IRCChannel::IRCChannel object
+ *
+ * channel에 존재하는 user member 검색
+ * channel에서 동작하는 명령어 처리
+ *
+ *
+ * @param name
+ * @param client
+ */
+
 IRCChannel::IRCChannel(const std::string& name, IRCClient* client) : _name(name), _operator(client)
 {
 	_status.state = 0;

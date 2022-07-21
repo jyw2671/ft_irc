@@ -41,7 +41,6 @@ void IRCServer::start()
 		count = IRCEvent::kevent();
 		/**
 		 * @brief loop
-		 *
 		 */
 		for (IRCEvent::_index = 0; IRCEvent::_index < count; ++IRCEvent::_index)
 		{

@@ -75,12 +75,14 @@ e_result IRCCommand::m_is_valid(e_type type)
  */
 e_result IRCCommand::m_to_client(std::string message)
 {
+	log::print() << message;
 	_to_client->buffer.append(message);
 	return ERROR;
 }
 
 void IRCCommand::m_to_client(IRCClient& client, const std::string& message)
 {
+	log::print() << message;
 	client.get_buffers().to_client.buffer.append(message);
 	_ircserver->toggle(client, EVFILT_READ);
 }

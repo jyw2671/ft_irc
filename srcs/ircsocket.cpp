@@ -280,6 +280,7 @@ void	IRCSocket::socket_listen()
 		exit(EXIT_FAILURE);
 	}
 	log::print() << "listen ot socket fd " << _socket.fd << log::endl;
+	fcntl(_socket.fd, F_SETFL, O_NONBLOCK);
 }
 
 /**

@@ -70,11 +70,12 @@
  * kevent는 ident와 filter를 식별자로 삼는다. 이를 통해 kevent의 중복 등록을 막고 해당 이벤트 발생조건이 부합하지 않을 경우(파일 디스크립터가 close될 경우 등)에는 kqueue에 의해 삭제되어 최소한의 kevent만 남을 수 있도록 관리한다.
  *
  * kqueue()로 kqueue를 할당하고, 이벤트의 변화(등록, 삭제 등)를 kevent()에 전달, kevent()가 반환한 처리가능한 event를 받아 그에 맞게 처리한다.
- */
-
-/**
- * @brief what is I/O Multiplexing?
  *
+ * kqueue는 select나 poll에 비해 이벤트 처리에서 효율적인 이유
+ * 이벤트 발생 시, 해당 이벤트에 접근하는 시간복잡도가 O(1)이다.
+ * select와 poll의 경우 이벤트 발생 시 해당 이벤트에 접근하는 시간복잡도가 O(N)이다. 등록된 파일 디스크립터를 하나하나 체크해서 커널과 유저 공간 사이에 여러번의 데이터 복사를 진행때문
+ * kqueue는 발생한 이벤트를 정리하여 return해주기 때문에 O(1)로 접근 가능하며 등록된 이벤트를 따로 관리할 필요가 없다.
+ * select는 fd_set, poll은 poll_fd 구조체의 배열로 모니터링할 이벤트들을 사용자가 관리하고, 이를 select()나 poll()에 전달해야 하지만, kqueue의 경우 새로 등록할 이벤트, 발생한 이벤트만 관리해주면 된다. 모니터링되는 이벤트는 kqueue, 즉 커널에서 관리된다.
  */
 
 IRCEvent::IRCEvent()
@@ -85,7 +86,6 @@ IRCEvent::~IRCEvent()
 
 /**
  * @brief kevent struct initialize & setting
- *
  */
 void IRCEvent::event_set(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata)
 {
